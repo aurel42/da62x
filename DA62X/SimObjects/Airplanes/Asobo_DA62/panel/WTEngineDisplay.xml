@@ -105,15 +105,20 @@
 				</If>
 			</Value2>
 			<ColorZone>
+				<Color>white</Color>
+				<Begin>0</Begin>
+				<End>95.25</End>
+			</ColorZone>
+			<ColorZone>
 				<Color>green</Color>
 				<Begin>0</Begin>
-				<End>95.5</End>
+				<End>95.25</End>
+			</ColorZone>
 			<ColorZone>
 				<Color>yellow</Color>
-				<Begin>95.5</Begin>
+				<Begin>95</Begin>
 				<End>100</End>
 			</ColorZone>			
-			</ColorZone>
 			<GraduationLength text="True">20</GraduationLength>
 			<BeginText>Load%</BeginText>
 		</Gauge>
@@ -157,6 +162,11 @@
 			</If>
 			</Value2>
 			<ColorZone>
+				<Color>white</Color>
+				<Begin>0</Begin>
+				<End>2205</End>
+			</ColorZone>
+			<ColorZone>
 				<Color>green</Color>
 				<Begin>0</Begin>
 				<End>2205</End>
@@ -193,60 +203,10 @@
 					<SizePercent>100</SizePercent>
 			</Style>
 			<Value>
-				<If>
-				<Condition>
-					<Or>
-						<Lower>
-							<Simvar name="ELECTRICAL GENALT BUS AMPS:1" unit="amperes"/>
-							<Constant>1</Constant>
-						</Lower>
-						<Lower>
-							<Simvar name="PROP RPM:1" unit="rpm"/>
-							<Constant>500</Constant>
-						</Lower>				
-					</Or>
-				</Condition>
-				<Then>
-					<Multiply>	
-						<Add>
-							<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:1" unit="volts"/>
-							<Simvar name="ELECTRICAL BATTERY VOLTAGE" unit="volts"/>
-						</Add>
-					<Constant>0.5</Constant>
-					</Multiply>
-				</Then>
-				<Else>
-						<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:1" unit="volts"/>
-				</Else>				
-				</If>				
+					<Simvar name="L:XMLVAR_MAIN_BUS_VOLTAGE_1" unit="volts"/>				
 			</Value>
 			<Value2>
-				<If>
-				<Condition>
-					<Or>
-						<Lower>
-							<Simvar name="ELECTRICAL GENALT BUS AMPS:2" unit="amperes"/>
-							<Constant>1</Constant>
-						</Lower>
-						<Lower>
-							<Simvar name="PROP RPM:2" unit="rpm"/>
-							<Constant>500</Constant>
-						</Lower>				
-					</Or>
-				</Condition>
-				<Then>
-					<Multiply>	
-						<Add>
-							<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:2" unit="volts"/>
-							<Simvar name="ELECTRICAL BATTERY VOLTAGE" unit="volts"/>
-						</Add>
-					<Constant>0.5</Constant>
-					</Multiply>
-				</Then>
-				<Else>
-						<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:2" unit="volts"/>
-				</Else>				
-				</If>	
+					<Simvar name="L:XMLVAR_MAIN_BUS_VOLTAGE_2" unit="volts"/>	
 			</Value2>
 			<ColorZone>
 				<Color>red</Color>
@@ -278,11 +238,11 @@
 			<YellowBlink>
 				<Or>
 					<Greater>
-						<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:3" unit="volts"/>
+						<Simvar name="L:XMLVAR_MAIN_BUS_VOLTAGE_1" unit="volts"/>
 						<Constant>30</Constant>
 					</Greater>
 					<Lower>
-						<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:3" unit="volts"/>
+						<Simvar name="L:XMLVAR_MAIN_BUS_VOLTAGE_1" unit="volts"/>
 						<Constant>25</Constant>
 					</Lower>
 				</Or>
@@ -290,11 +250,11 @@
 			<RedBlink>
 				<Or>
 					<Greater>
-						<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:3" unit="volts"/>
+						<Simvar name="L:XMLVAR_MAIN_BUS_VOLTAGE_1" unit="volts"/>
 						<Constant>32</Constant>
 					</Greater>
 					<Lower>
-						<Simvar name="ELECTRICAL MAIN BUS VOLTAGE:3" unit="volts"/>
+						<Simvar name="L:XMLVAR_MAIN_BUS_VOLTAGE_1" unit="volts"/>
 						<Constant>24.1</Constant>
 					</Lower>
 				</Or>
@@ -316,88 +276,10 @@
 					<ValuePos>End</ValuePos>
 			</Style>
 			<Value>
-				<If>
-					<Condition>
-						<And>
-							<Lower>
-								<Simvar name="PROP RPM:2" unit="rpm"/>
-								<Constant>550</Constant>
-							</Lower>
-							<Greater>
-								<Simvar name="PROP RPM:1" unit="rpm"/>
-								<Constant>550</Constant>
-							</Greater>
-							<Greater>
-								<Simvar name="ELECTRICAL GENALT BUS AMPS:2" unit="amperes"/>
-								<Constant>1</Constant>
-							</Greater>
-						</And>							
-					</Condition>
-				<Then>
-					<Multiply>
-						<Simvar name="ELECTRICAL GENALT BUS AMPS:1" unit="amperes"/>
-						<Constant>2</Constant>
-					</Multiply>
-				</Then>
-				<Else>
-						<If>
-							<Condition>
-								<Lower>
-									<Simvar name="PROP RPM:1" unit="rpm"/>
-									<Constant>550</Constant>
-								</Lower>				
-							</Condition>
-						<Then>
-							<Constant>0</Constant>
-						</Then>
-						<Else>
-							<Simvar name="ELECTRICAL GENALT BUS AMPS:1" unit="amperes"/>
-						</Else>				
-						</If>	
-				</Else>				
-				</If>
+					<Simvar name="L:XMLVAR_GENALT_BUS_AMPS_1" unit="amps"/>				
 			</Value>
 			<Value2>
-				<If>
-					<Condition>
-						<And>
-							<Lower>
-								<Simvar name="PROP RPM:1" unit="rpm"/>
-								<Constant>550</Constant>
-							</Lower>
-							<Greater>
-								<Simvar name="PROP RPM:2" unit="rpm"/>
-								<Constant>550</Constant>
-							</Greater>							
-							<Greater>
-								<Simvar name="ELECTRICAL GENALT BUS AMPS:1" unit="amperes"/>
-								<Constant>1</Constant>
-							</Greater>
-						</And>							
-					</Condition>
-				<Then>
-					<Multiply>
-						<Simvar name="ELECTRICAL GENALT BUS AMPS:2" unit="amperes"/>
-						<Constant>2</Constant>
-					</Multiply>
-				</Then>
-				<Else>
-						<If>
-							<Condition>
-								<Lower>
-									<Simvar name="PROP RPM:2" unit="rpm"/>
-									<Constant>550</Constant>
-								</Lower>				
-							</Condition>
-						<Then>
-							<Constant>0</Constant>
-						</Then>
-						<Else>
-							<Simvar name="ELECTRICAL GENALT BUS AMPS:2" unit="amperes"/>
-						</Else>				
-						</If>	
-				</Else>				
-				</If>
+					<Simvar name="L:XMLVAR_GENALT_BUS_AMPS_2" unit="amps"/>	
 			</Value2>
 			<ColorZone>
 				<Color>green</Color>
@@ -418,13 +300,13 @@
 			<EndText>80</EndText>
 			<YellowBlink>
 				<Greater>
-					<Simvar name="ELECTRICAL GENALT BUS AMPS:1" unit="amperes"/>
+					<Simvar name="L:XMLVAR_GENALT_BUS_AMPS_1" unit="amps"/>
 					<Constant>60</Constant>
 				</Greater>
 			</YellowBlink>
 			<RedBlink>
 				<Greater>
-					<Simvar name="ELECTRICAL GENALT BUS AMPS:1" unit="amperes"/>
+					<Simvar name="L:XMLVAR_GENALT_BUS_AMPS_2" unit="amps"/>	
 					<Constant>70</Constant>
 				</Greater>
 			</RedBlink>
@@ -434,7 +316,7 @@
 			<Text>Engine</Text>
 		</Header>
 	
-		<Gauge><!--Gearbox_Master-->
+		<Gauge><!--Gearbox_XML-->
 			<Type>DoubleHorizontal</Type>
 			<ID>Piston_CoolantTempGauge</ID>
 			<Title>Gearbox</Title>
@@ -449,42 +331,10 @@
 				<SizePercent>100</SizePercent>
 			</Style>
 			<Value>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
-				</Condition>
-			<Then>			
-				<Multiply>
-					<Add>
-						<Simvar name="RECIP ENG RADIATOR TEMPERATURE:1" unit="celsius"/>
-						<Simvar name="GENERAL ENG OIL TEMPERATURE:1" unit="celsius"/>
-					</Add>
-					<Constant>0.5</Constant>
-				</Multiply>
-			</Then>
-			<Else> 
-			<Constant>-99</Constant>
-			</Else>
-			</If>
+					<Simvar name="L:XMLVAR_GBOX_TEMPERATURE_1" unit="celsius"/>
 			</Value>
 			<Value2>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
-				</Condition>
-			<Then>			
-				<Multiply>
-					<Add>
-						<Simvar name="RECIP ENG RADIATOR TEMPERATURE:2" unit="celsius"/>
-						<Simvar name="GENERAL ENG OIL TEMPERATURE:2" unit="celsius"/>
-					</Add>
-					<Constant>0.5</Constant>
-				</Multiply>
-			</Then>
-			<Else> 
-			<Constant>-99</Constant>
-			</Else>
-			</If>
+					<Simvar name="L:XMLVAR_GBOX_TEMPERATURE_2" unit="celsius"/>
 			</Value2>
 			<ColorZone>
 				<Color>red</Color>
@@ -563,7 +413,7 @@
 			</RedBlink>
 		</Gauge>
 		
-		<Text><!--coolant_Master-->
+		<Text><!--coolant_XML-->
 			<Left>
 			<If>
 				<Condition>
@@ -601,11 +451,11 @@
 			<Text>Oil</Text>
 		</Header>
 		
-		<Text><!--OILtemp_Master-->
+		<Text><!--OILtemp_XML-->
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_OIL_TEMPERATURE_1" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="0">
@@ -621,7 +471,7 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_OIL_TEMPERATURE_2" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="0">
@@ -635,7 +485,7 @@
 			</Right>
 		</Text>
 		
-		<Text><!--OilPress_Master-->
+		<Text><!--OilPress_XML-->
 			<Left>
 			<If>
 				<Condition>
@@ -643,7 +493,7 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
-					<Simvar name="ENG OIL PRESSURE:1" unit="bar"/>
+					<Simvar name="L:XMLVAR_OIL_PRESSURE_1" unit="bar"/>
 				</ToFixed>
 			</Then>
 			<Else>
@@ -659,7 +509,7 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
-					<Simvar name="ENG OIL PRESSURE:2" unit="bar"/>
+					<Simvar name="L:XMLVAR_OIL_PRESSURE_2" unit="bar"/>
 				</ToFixed>
 			</Then>
 			<Else>
@@ -669,27 +519,34 @@
 			</Right>
 		</Text>
 		
-		<Gauge><!--deice-->
+		<Gauge><!--Deice-->
 			<Type>Horizontal</Type>
 				<ID>Deice</ID>
 				<Title>Deice Fluid</Title>
 				<Unit></Unit>
 				<Minimum>0</Minimum>
-				<Maximum>4</Maximum>
-					<Value>3.5</Value>
+				<Maximum>9.5</Maximum>
+					<Value>
+						<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
+					</Value>
 				<ColorZone>
 				<Color>red</Color>
 					<Begin>0</Begin>
-					<End>0.2</End>
+					<End>1</End>
+				</ColorZone>
+				<ColorZone>
+				<Color>yellow</Color>
+					<Begin>1</Begin>
+					<End>2.9</End>
 				</ColorZone>
 				<ColorZone>
 					<Color>green</Color>
-					<Begin>0.2</Begin>
-					<End>4</End>
+					<Begin>2.9</Begin>
+					<End>9.5</End>
 				</ColorZone>
 				<BeginText></BeginText>
 				<EndText></EndText>
-				<GraduationLength>1</GraduationLength>
+				<GraduationLength>2.375</GraduationLength>
 		</Gauge>
 	
 	</EngineDisplaySystem>
@@ -774,13 +631,18 @@
 				</If>
 			</Value2>
 			<ColorZone>
+				<Color>white</Color>
+				<Begin>0</Begin>
+				<End>95.25</End>
+			</ColorZone>
+			<ColorZone>
 				<Color>green</Color>
 				<Begin>0</Begin>
-				<End>95.5</End>
+				<End>95.25</End>
 			</ColorZone>
 			<ColorZone>
 				<Color>yellow</Color>
-				<Begin>95.5</Begin>
+				<Begin>95.25</Begin>
 				<End>100</End>
 			</ColorZone>
 			<GraduationLength text="True">20</GraduationLength>
@@ -825,6 +687,11 @@
 			</Else>
 			</If>
 			</Value2>
+			<ColorZone>
+				<Color>white</Color>
+				<Begin>0</Begin>
+				<End>2205</End>
+			</ColorZone>
 			<ColorZone>
 				<Color>green</Color>
 				<Begin>0</Begin>
@@ -910,16 +777,16 @@
 			</Right>
 		</Text>
 		
-		<Text><!--FuelTemp-->
+		<Text><!--FuelTemp_XML-->
 			<Left>
 				<ToFixed precision="0">
 				<Substract>
 					<Multiply>
 						<Add>
-							<Simvar name="TOTAL AIR TEMPERATURE:2" unit="celsius"/>
+							<Simvar name="L:XMLVAR_FUEL_TEMPERATURE" unit="celsius"/>
 							<Constant>30</Constant>
 						</Add>
-						<Constant>1.05</Constant>
+						<Constant>1.02</Constant>
 					</Multiply>
 					<Constant>30</Constant>
 				</Substract>
@@ -928,7 +795,7 @@
 			<Center>°C</Center>
 			<Right>
 				<ToFixed precision="0">
-				<Simvar name="TOTAL AIR TEMPERATURE:2" unit="celsius"/>
+				<Simvar name="L:XMLVAR_FUEL_TEMPERATURE" unit="celsius"/>
 				</ToFixed>
 			</Right>
 		</Text>
@@ -996,10 +863,7 @@
 						<Multiply>
 							<Simvar name="GROUND VELOCITY:1" unit="knots"/>
 							<Divide>
-								<Add>
-									<Simvar name="FUEL TANK LEFT MAIN QUANTITY" unit="gallons"/>
-									<Simvar name="FUEL TANK RIGHT MAIN QUANTITY" unit="gallons"/>
-								</Add>
+								<Simvar name="FUEL TOTAL QUANTITY:1" unit="gallon"/>							
 								<Add>
 									<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
 									<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
@@ -1118,13 +982,18 @@
 				</If>
 			</Value2>
 			<ColorZone>
+				<Color>white</Color>
+				<Begin>0</Begin>
+				<End>95.25</End>
+			</ColorZone>
+			<ColorZone>
 				<Color>green</Color>
 				<Begin>0</Begin>
-				<End>95.5</End>
+				<End>95.25</End>
 			</ColorZone>
 			<ColorZone>
 				<Color>yellow</Color>
-				<Begin>95.5</Begin>
+				<Begin>95</Begin>
 				<End>100</End>
 			</ColorZone>
 			<GraduationLength text="True">20</GraduationLength>
@@ -1169,6 +1038,11 @@
 			</Else>
 			</If>
 			</Value2>
+			<ColorZone>
+				<Color>white</Color>
+				<Begin>0</Begin>
+				<End>2205</End>
+			</ColorZone>
 			<ColorZone>
 				<Color>green</Color>
 				<Begin>0</Begin>
@@ -1226,7 +1100,7 @@
 			</Right>
 		</Text>
 		
-		<Gauge><!--Oiltemp_Master-->
+		<Gauge><!--Oiltemp_XML-->
 			<Type>DoubleHorizontal</Type>
 			<ID>Piston_OilTempGauge</ID>
 			<Title>Oil Temp</Title>
@@ -1236,30 +1110,10 @@
 			<Minimum>-40</Minimum>
 			<Maximum>150</Maximum> 
 			<Value>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
-				</Condition>
-			<Then>
-				<Simvar name="GENERAL ENG OIL TEMPERATURE:1" unit="celsius"/>
-			</Then>
-			<Else>
-				<Constant>-99</Constant>
-			</Else>
-			</If>
+				<Simvar name="L:XMLVAR_OIL_TEMPERATURE_1" unit="celsius"/>
 			</Value>
 			<Value2>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
-				</Condition>
-			<Then>
-				<Simvar name="GENERAL ENG OIL TEMPERATURE:2" unit="celsius"/>
-			</Then>
-			<Else>
-				<Constant>-99</Constant>
-			</Else>
-			</If>
+				<Simvar name="L:XMLVAR_OIL_TEMPERATURE_2" unit="celsius"/>
 			</Value2>
 			<ColorZone>
 				<Color>red</Color>
@@ -1290,7 +1144,7 @@
 			<EndText></EndText>
 		</Gauge>
 		
-		<Gauge><!--Oilpressure_Master-->
+		<Gauge><!--Oilpressure_XML-->
 			<Type>DoubleHorizontal</Type>
 			<ID>Piston_OilPressGauge</ID>
 			<Title>Oil Press</Title>
@@ -1300,30 +1154,10 @@
 			<Minimum>0</Minimum>
 			<Maximum>6.9</Maximum>
 			<Value>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
-				</Condition>
-			<Then>
-				<Simvar name="GENERAL ENG OIL PRESSURE:1" unit="bar"/>
-			</Then>
-			<Else>
-				<Constant>-99</Constant>
-			</Else>
-			</If>
+				<Simvar name="L:XMLVAR_OIL_PRESSURE_1" unit="bar"/>
 			</Value>
 			<Value2>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
-				</Condition>
-			<Then>
-				<Simvar name="GENERAL ENG OIL PRESSURE:2" unit="bar"/>
-			</Then>
-			<Else>
-				<Constant>-99</Constant>
-			</Else>
-			</If>
+				<Simvar name="L:XMLVAR_OIL_PRESSURE_2" unit="bar"/>
 			</Value2>
 			<ColorZone>
 				<Color>red</Color>
@@ -1354,40 +1188,20 @@
 			<EndText></EndText>
 		</Gauge>
 		
-		<Gauge><!--coolanttemp_Master-->
+		<Gauge><!--coolanttemp_XML-->
 			<Type>DoubleHorizontal</Type>
 			<ID>Piston_CoolantTempGauge</ID>
 			<Title>Coolant Temp</Title>
 			<Unit></Unit>
 			<CursorText>L</CursorText>
 			<CursorText2>R</CursorText2>
-			<Minimum>-40</Minimum> <!-- Not Sure -->
-			<Maximum>150</Maximum> <!-- Not Sure -->
+			<Minimum>-40</Minimum>
+			<Maximum>150</Maximum>
 			<Value>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
-				</Condition>
-			<Then>
-				<Simvar name="RECIP ENG RADIATOR TEMPERATURE:1" unit="celsius"/>
-			</Then>
-			<Else>
-				<Constant>-99</Constant>
-			</Else>
-			</If>
+				<Simvar name="L:XMLVAR_RADIATOR_TEMPERATURE_1" unit="celsius"/>
 			</Value>
 			<Value2>
-			<If>
-				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
-				</Condition>
-			<Then>
-				<Simvar name="RECIP ENG RADIATOR TEMPERATURE:2" unit="celsius"/>
-			</Then>
-			<Else>
-				<Constant>-99</Constant>
-			</Else>
-			</If>
+				<Simvar name="L:XMLVAR_RADIATOR_TEMPERATURE_2" unit="celsius"/>
 			</Value2>
 			<ColorZone>
 				<Color>red</Color>
@@ -1418,7 +1232,7 @@
 			<EndText></EndText>
 		</Gauge>
 		
-		<Gauge><!--FUELTEMP-->
+		<Gauge><!--FUELTEMP_XML-->
 			<Type>DoubleHorizontal</Type>
 			<ID>Piston_FuelTempGauge</ID>
 			<Title>Fuel Temp</Title>
@@ -1431,16 +1245,16 @@
 				<Substract>
 					<Multiply>
 						<Add>
-							<Simvar name="TOTAL AIR TEMPERATURE:2" unit="celsius"/>
+							<Simvar name="L:XMLVAR_FUEL_TEMPERATURE" unit="celsius"/>
 							<Constant>30</Constant>
 						</Add>
-						<Constant>1.05</Constant>
+						<Constant>1.02</Constant>
 					</Multiply>
 					<Constant>30</Constant>
 				</Substract>
 			</Value>
 			<Value2>		
-				<Simvar name="TOTAL AIR TEMPERATURE:2" unit="celsius"/>
+				<Simvar name="L:XMLVAR_FUEL_TEMPERATURE" unit="celsius"/>
 			</Value2>
 			<ColorZone>
 				<Color>red</Color>

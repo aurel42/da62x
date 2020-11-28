@@ -17,6 +17,26 @@
 		<Include ModelBehaviorFile="Asobo\GlassCockpit\AS1000.xml"/>
 		<!-- ############################################-->
 		
+		
+		<!-- DA62X -->
+		<Include Path="DA62X\CustomDA62Logic.xml"/>
+		<Component ID="DA62X_Custom_Behavior">
+			<UseTemplate Name="L_Voltage_Indication"></UseTemplate>
+			<UseTemplate Name="R_Voltage_Indication"></UseTemplate>
+			<UseTemplate Name="L_Amps_Indication"></UseTemplate>
+			<UseTemplate Name="R_Amps_Indication"></UseTemplate>
+			<UseTemplate Name="L_Engine_Indications"></UseTemplate>
+			<UseTemplate Name="R_Engine_Indications"></UseTemplate>	
+			<UseTemplate Name="Fuel_Temperature"></UseTemplate>	
+			<UseTemplate Name="Deice_Fluid"></UseTemplate>	
+			
+			<UseTemplate Name="Smooth_Indication"></UseTemplate>	
+			<UseTemplate Name="Smooth_Fuel_Indication"></UseTemplate>
+		</Component>
+		<!-- DA62X -->
+		
+	
+		
 		<!--Template Name = "Allow_Starter">
 			<Update Frequency="1">	
 		(A:RECIP ENG ENGINE MASTER SWITCH:#ID#, Bool) !
@@ -53,10 +73,10 @@
 				<ANIMTIP_0_ON_PERCENT>0</ANIMTIP_0_ON_PERCENT>
 				<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.ENGINE_MASTER_LEFT_ON</ANIMTIP_1>
 				<ANIMTIP_1_ON_PERCENT>1</ANIMTIP_1_ON_PERCENT>
-				<UseTemplate Name="Allow_Starter">
+				<!--UseTemplate Name="Allow_Starter">
 				<ID>1</ID>
 				<CIRCUIT_ID>3</CIRCUIT_ID>
-				</UseTemplate>
+				</UseTemplate-->
 				
 				<UseTemplate Name="ASOBO_GT_Switch_Dummy">
 				<NODE_ID>ENGINE_Switch_Master_1</NODE_ID>
@@ -66,10 +86,10 @@
 				<SWITCH_DIRECTION>Vertical</SWITCH_DIRECTION>
 				<NUM_STATES>2</NUM_STATES>
 				</UseTemplate>
-				<UseTemplate Name="Allow_Starter">
+				<!--UseTemplate Name="Allow_Starter">
 				<ID>2</ID>
 				<CIRCUIT_ID>4</CIRCUIT_ID>
-				</UseTemplate>
+				</UseTemplate-->
 
 			</UseTemplate>
 			
@@ -99,8 +119,9 @@
 			<CameraTitle>Pedestal_Fwd</CameraTitle>
 		</Component>
 	
-		<!-- #### Commenting ENGINE ECU, as it is not implemented  ####-->
+		<!-- #### Commenting ENGINE ECU, as it is not implemente	d DA62X  ####-->
 		<Component ID="ENGINE_ECU">
+		
 			<UseTemplate Name="ASOBO_GT_Switch_Dummy">
 				<ANIM_NAME>ECU_Switch_voter_L</ANIM_NAME>
 				<NODE_ID>ECU_Switch_voter_L</NODE_ID>
@@ -108,14 +129,12 @@
 				<SWITCH_POSITION_VAR>XMLVAR_ECU_VOTER_1</SWITCH_POSITION_VAR>
 				</UseTemplate>
 				
-				
-			<UseTemplate Name="ASOBO_GT_Switch_Dummy">
+			<UseTemplate Name="ASOBO_GT_Switch_3States">
 				<ANIM_NAME>ECU_Switch_voter_R</ANIM_NAME>
 				<NODE_ID>ECU_Switch_voter_R</NODE_ID>
 				<SWITCH_POSITION_TYPE>I</SWITCH_POSITION_TYPE>
 				<SWITCH_POSITION_VAR>XMLVAR_ECU_VOTER_2</SWITCH_POSITION_VAR>
 			</UseTemplate>
-			
 			
 			<Component ID="ECU_push_ecutest_L" Node="ECU_push_ecutest_L">
 				<UseTemplate Name="ASOBO_GT_Push_Button_Held">
@@ -490,7 +509,7 @@
 			</UseTemplate>
 			<UseTemplate Name="ASOBO_ELECTRICAL_Switch_Alternator_Template">
 				<ID>1</ID>
-			<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.MASTER_SWITCH_ALT_LH_OFF</ANIMTIP_0>
+				<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.MASTER_SWITCH_ALT_LH_OFF</ANIMTIP_0>
 				<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.MASTER_SWITCH_ALT_LH_ON</ANIMTIP_1>
 			</UseTemplate>
 			<UseTemplate Name="ASOBO_ELECTRICAL_Switch_Alternator_Template">
@@ -522,16 +541,21 @@
 			<UseTemplate Name="ASOBO_AUTOPILOT_Push_Autopilot_Template">
 				<ANIM_NAME>PUSH_AUTOPILOT_AP</ANIM_NAME>
 				<NODE_ID>push_autopilot_ap</NODE_ID>
-				<ON_AP_MASTER_SWITCH>
-					(L:XMLVAR_APTrim) 0 == if{ 
-						(A:AUTOPILOT YAW DAMPER, Bool) ! (A:AUTOPILOT MASTER, bool) and if{
-							(&gt;K:YAW_DAMPER_TOGGLE) 
+					<ON_AP_MASTER_SWITCH>
+					(L:XMLVAR_APTrim) 0 == 
+					if{ 
+						(A:AUTOPILOT YAW DAMPER, Bool) ! 
+						(A:AUTOPILOT MASTER, bool) and 
+						if{
+						(&gt;K:YAW_DAMPER_TOGGLE) 
 						}
 					}
 				</ON_AP_MASTER_SWITCH>
 				<TOOLTIPID>%((A:AUTOPILOT MASTER, bool))%{if}TT:COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_AP_ON%{else}TT:COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_AP_OFF%{end}</TOOLTIPID>
 			</UseTemplate>
 		</Component>
+		<UseTemplate Name="ASOBO_AUTOPILOT_Push_YawDamper_Template">
+		</UseTemplate>
 		
 		<!-- DEICE ######################################-->
 		<Component ID="DEICE">
@@ -541,10 +565,12 @@
 				<Update Frequency="0.1">
 					(O:IsInit) ! if{
 						1 (&gt;O:IsInit)
-						(A:ENG ANTI ICE:1, Bool) if{
-							1 (&gt;I:XMLVAR_IceLightState)
-						} els{
-							2 (&gt;I:XMLVAR_IceLightState)
+						(A:ENG ANTI ICE:1, Bool) 
+						if{
+						1 (&gt;I:XMLVAR_IceLightState)
+						} 
+						els{
+						2 (&gt;I:XMLVAR_IceLightState)
 						}
 					}
 				</Update>
@@ -552,15 +578,32 @@
 					<ANIM_NAME>DEICE_Switch_Airframe</ANIM_NAME>
 					<SWITCH_POSITION_TYPE>I</SWITCH_POSITION_TYPE>
 					<SWITCH_POSITION_VAR>XMLVAR_IceLightState</SWITCH_POSITION_VAR>
-					<CODE_POS_0>(&gt;K:ANTI_ICE_ON) (&gt;K:WINDSHIELD_DEICE_ON)</CODE_POS_0>
-					<CODE_POS_1>(&gt;K:ANTI_ICE_ON) (&gt;K:WINDSHIELD_DEICE_ON)</CODE_POS_1>
-					<CODE_POS_2>
-						(I:XMLVAR_DEICEAlternateDisabled) if{ (&gt;K:ANTI_ICE_OFF) }
-						(I:XMLVAR_DEICE_Windshield_PumpActive) ! if{ (&gt;K:WINDSHIELD_DEICE_OFF) }
+					
+					<CODE_POS_0><!--HIGH-->
+					2 (&gt;L:XMLVAR_DEICE_MODE) 
+					</CODE_POS_0>
+					
+					<CODE_POS_1><!--LOW-->
+					1 (&gt;L:XMLVAR_DEICE_MODE) 
+					</CODE_POS_1>
+					
+					<CODE_POS_2><!--OFF-->
+						I:XMLVAR_DEICEAlternateDisabled) 
+						if{ 
+						(&gt;K:ANTI_ICE_OFF) 
+						}
+						(I:XMLVAR_DEICE_Windshield_PumpActive) ! 
+						if{ 
+						(&gt;K:WINDSHIELD_DEICE_OFF) 
+						}
+						
+					0 (&gt;L:XMLVAR_DEICE_MODE) 
 					</CODE_POS_2>
+	
 					<STATE0_TEST>(I:XMLVAR_IceLightState) 0 ==</STATE0_TEST>
 					<STATE1_TEST>(I:XMLVAR_IceLightState) 1 ==</STATE1_TEST>
 					<STATE2_TEST>(I:XMLVAR_IceLightState) 2 ==</STATE2_TEST>
+					
 					<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.DA62_DEICE_MAIN_HIGH</ANIMTIP_0>
 					<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.DA62_DEICE_MAIN_NORM</ANIMTIP_1>
 					<ANIMTIP_2>TT:COCKPIT.TOOLTIPS.DA62_DEICE_MAIN_OFF</ANIMTIP_2>
@@ -574,8 +617,17 @@
 					<VAR_NAME>XMLVAR_DEICE_Windshield_PumpActive</VAR_NAME>
 					<VAR_SCOPE>I</VAR_SCOPE>
 					<DURATION>5</DURATION> 
-					<CODE_START_TIMER>(&gt;K:WINDSHIELD_DEICE_ON)</CODE_START_TIMER>
-					<CODE_AFTER_DURATION>(I:XMLVAR_IceLightState) 2 == if{ (&gt;K:WINDSHIELD_DEICE_OFF) }</CODE_AFTER_DURATION>
+					<CODE_START_TIMER>
+					(&gt;K:WINDSHIELD_DEICE_ON) 
+					1 (&gt;L:XMLVAR_WINDSHIELD_DEICE) 
+					</CODE_START_TIMER>
+					<CODE_AFTER_DURATION>
+					(I:XMLVAR_IceLightState) 2 == 
+					if{ 
+					(&gt;K:WINDSHIELD_DEICE_OFF) 
+					0 (&gt;L:XMLVAR_WINDSHIELD_DEICE) 
+					}
+					</CODE_AFTER_DURATION>
 					<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.DA62_DEICE_SWITCH_WINDSHIELD_PUSH</ANIMTIP_0>
 					<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.DA62_DEICE_SWITCH_WINDSHIELD_PUSHED</ANIMTIP_1>
 				</UseTemplate>
@@ -589,6 +641,8 @@
 					<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.DA62_DEICE_SWITCH_PUMP_2</ANIMTIP_1>
 				</UseTemplate>
 			</Component>
+			
+			
 			<Component ID="DEICE_Switch_Alternate" Node="DEICE_switch_alternate">
 				<Update Frequency="0.1">
 					(O:IsInit) ! if{
@@ -596,6 +650,8 @@
 						1 (&gt;I:XMLVAR_DEICEAlternateDisabled)
 					}
 				</Update>
+				
+				
 				<UseTemplate Name="ASOBO_GT_Toggle_Variable_Anim">
 					<VAR_NAME>XMLVAR_DEICEAlternateDisabled</VAR_NAME>
 					<VAR_SCOPE>I</VAR_SCOPE>
@@ -603,10 +659,15 @@
 					<ANIM_CODE>(I:XMLVAR_DEICEAlternateDisabled) 100 *</ANIM_CODE>
 					<VERIF_STATE_CODE>(I:XMLVAR_DEICE_AlternateCoverOpened)</VERIF_STATE_CODE>
 					<TOGGLE_CODE>
-						(I:XMLVAR_DEICEAlternateDisabled) ! if{ 
-							(&gt;K:ANTI_ICE_ON) 
-						} els{
-							(I:XMLVAR_IceLightState) 2 == if{ (&gt;K:ANTI_ICE_OFF) }
+						(I:XMLVAR_DEICEAlternateDisabled) ! 
+						if{ 
+							1 (&gt;L:XMLVAR_DEICE_ALT) 
+						} 
+						els{
+							(I:XMLVAR_IceLightState) 2 == 
+							if{ 
+							0 (&gt;L:XMLVAR_DEICE_ALT) 
+							}
 						}					
 					</TOGGLE_CODE>
 					
@@ -615,6 +676,8 @@
 					
 				</UseTemplate>
 			</Component>
+			
+					
 			<Component ID="DEICE_Switch_Alternate_Cover" Node="DEICE_Cover_switch_alternate">
 				<UseTemplate Name="ASOBO_GT_Toggle_Variable_Anim">
 					<VAR_NAME>XMLVAR_DEICE_AlternateCoverOpened</VAR_NAME>
@@ -623,9 +686,16 @@
 					<WWISE_EVENT_1>deice_cover_alternate_switch_on</WWISE_EVENT_1>
 					<WWISE_EVENT_2>deice_cover_alternate_switch_off</WWISE_EVENT_2>
 					<TOGGLE_CODE>
-						(I:XMLVAR_DEICEAlternateDisabled) ! (I:XMLVAR_DEICE_AlternateCoverOpened) ! and if{ 
+						(I:XMLVAR_DEICEAlternateDisabled) ! (I:XMLVAR_DEICE_AlternateCoverOpened) ! and 
+						if{ 
 							1 (&gt;I:XMLVAR_DEICEAlternateDisabled)
-							(I:XMLVAR_IceLightState) 2 == if{ (&gt;K:ANTI_ICE_OFF) }
+							0 (&gt;L:XMLVAR_DEICE_ALT) 
+							(I:XMLVAR_IceLightState) 2 == 
+							if{
+							(&gt;K:ANTI_ICE_OFF) 
+							0 (&gt;L:XMLVAR_DEICE_ALT) 
+							0 (&gt;L:XMLVAR_DEICE_MODE) 
+							}
 						}					
 					</TOGGLE_CODE>
 					
@@ -652,25 +722,38 @@
 
 				</UseTemplate>
 			</Component>
+			
+			
 			<Component ID="DEICE_Panel_Lights">
 				<Component ID="DEICE_Light_Norm" Node="light_deice_03">
 					<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
-						<EMISSIVE_CODE>(I:XMLVAR_IceLightState) 1 &lt;=</EMISSIVE_CODE>
+						<EMISSIVE_CODE>
+						(I:XMLVAR_IceLightState) 1 &lt;=
+						(L:XMLVAR_DEICE_ALT) ! and 
+						</EMISSIVE_CODE>
 						<ALT_CODE>(L:XMLVAR_LTS_Test)</ALT_CODE>
 					</UseTemplate>
 				</Component>
 				<Component ID="DEICE_Light_High" Node="light_deice_02">
 					<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
-						<EMISSIVE_CODE>(I:XMLVAR_IceLightState) 0 ==</EMISSIVE_CODE>
+						<EMISSIVE_CODE>
+						(I:XMLVAR_IceLightState) 0 ==
+						(L:XMLVAR_DEICE_ALT) ! and 
+						</EMISSIVE_CODE>
 						<ALT_CODE>(L:XMLVAR_LTS_Test)</ALT_CODE>
 					</UseTemplate>
 				</Component>
 				<Component ID="DEICE_Light_Max" Node="light_deice_01">
 					<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
-						<EMISSIVE_CODE>(I:XMLVAR_IceLightState) 0 == (L:XMLVAR_IceLightMaxStateEnabled) and</EMISSIVE_CODE>
+						<EMISSIVE_CODE>
+						(L:XMLVAR_DEICE_ALT) 0 ==
+						(I:XMLVAR_IceLightState) 0 == and 
+						(L:XMLVAR_IceLightMaxStateEnabled) and 
+						</EMISSIVE_CODE>
 						<ALT_CODE>(L:XMLVAR_LTS_Test)</ALT_CODE>
 					</UseTemplate>
 				</Component>
+				
 			</Component>
 			<Component ID="DEICE_Switch_WingLight_AnnunTest" Node="DEICE_Switch_WingLight_AnnunTest">
 				<Update Frequency="0.1">
@@ -708,6 +791,7 @@
 					
 				</UseTemplate>
 			</Component>
+			
 			<CameraTitle>PFD</CameraTitle>
 		</Component>
 		
@@ -771,6 +855,7 @@
 			</UseTemplate>
 			<CameraTitle>MFD</CameraTitle>
 		</Component>
+		
 		<!--Copied from TBM mod-->
 		<Component ID="GLASS_COCKPIT">
 		<Component ID="GLASS_COCKPIT_Screen_Attitude_Text" Node="AttitudeDisplay">
