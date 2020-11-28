@@ -43,7 +43,7 @@
 			<Value>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+				<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -68,14 +68,14 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>						
 			</Value>
 			<Value2>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+				<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -100,7 +100,7 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>
 			</Value2>
@@ -138,26 +138,26 @@
 			<Value>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<Simvar name="PROP RPM:1" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value>
 			<Value2>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<Simvar name="PROP RPM:2" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value2>
@@ -366,23 +366,11 @@
 			<YellowBlink>
 				<Or>
 					<Greater>
-						<Multiply>
-						<Add>
-							<Simvar name="RECIP ENG RADIATOR TEMPERATURE:1" unit="celsius"/>
-							<Simvar name="GENERAL ENG OIL TEMPERATURE:1" unit="celsius"/>
-						</Add>
-							<Constant>0.5</Constant>
-						</Multiply>
+						<Simvar name="L:XMLVAR_GBOX_TEMPERATURE_1" unit="celsius"/>
 						<Constant>115</Constant>
 					</Greater>
 					<Lower>
-						<Multiply>
-						<Add>
-							<Simvar name="RECIP ENG RADIATOR TEMPERATURE:1" unit="celsius"/>
-							<Simvar name="GENERAL ENG OIL TEMPERATURE:1" unit="celsius"/>
-						</Add>
-							<Constant>0.5</Constant>
-						</Multiply>
+						<Simvar name="L:XMLVAR_GBOX_TEMPERATURE_2" unit="celsius"/>
 						<Constant>35</Constant>
 					</Lower>
 				</Or>
@@ -390,23 +378,11 @@
 			<RedBlink>
 				<Or>
 					<Greater>
-						<Multiply>
-						<Add>
-							<Simvar name="RECIP ENG RADIATOR TEMPERATURE:1" unit="celsius"/>
-							<Simvar name="GENERAL ENG OIL TEMPERATURE:1" unit="celsius"/>
-						</Add>
-						<Constant>0.5</Constant>
-						</Multiply>
+						<Simvar name="L:XMLVAR_GBOX_TEMPERATURE_1" unit="celsius"/>
 						<Constant>120</Constant>
 					</Greater>
 					<Lower>
-						<Multiply>
-						<Add>
-							<Simvar name="RECIP ENG RADIATOR TEMPERATURE:1" unit="celsius"/>
-							<Simvar name="GENERAL ENG OIL TEMPERATURE:1" unit="celsius"/>
-						</Add>
-						<Constant>0.5</Constant>
-						</Multiply>
+						<Simvar name="L:XMLVAR_GBOX_TEMPERATURE_2" unit="celsius"/>
 						<Constant>-30</Constant>
 					</Lower>
 				</Or>
@@ -417,7 +393,7 @@
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="0">
@@ -425,7 +401,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>--</Constant>
 			</Else>
 			</If>	
 			</Left>
@@ -433,7 +409,7 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="0">
@@ -441,7 +417,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>--</Constant>
 			</Else>
 			</If>	
 			</Right>
@@ -455,15 +431,15 @@
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="L:XMLVAR_OIL_TEMPERATURE_1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="0">
-					<Simvar name="ENG OIL TEMPERATURE:1" unit="celsius"/>
+					<Simvar name="L:XMLVAR_OIL_TEMPERATURE_1" unit="celsius"/>
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Left>		
@@ -471,15 +447,15 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="L:XMLVAR_OIL_TEMPERATURE_2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="0">
-					<Simvar name="ENG OIL TEMPERATURE:2" unit="celsius"/>
+					<Simvar name="L:XMLVAR_OIL_TEMPERATURE_2" unit="celsius"/>
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Right>
@@ -489,7 +465,7 @@
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -497,7 +473,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Left>
@@ -505,7 +481,7 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -513,7 +489,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Right>
@@ -569,7 +545,7 @@
 			<Value>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+				<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -594,14 +570,14 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>						
 			</Value>
 			<Value2>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+				<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -626,7 +602,7 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>
 			</Value2>
@@ -670,7 +646,7 @@
 				<Simvar name="PROP RPM:1" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value>
@@ -683,7 +659,7 @@
 				<Simvar name="PROP RPM:2" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value2>
@@ -747,7 +723,7 @@
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -755,7 +731,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Left>
@@ -763,7 +739,7 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -771,7 +747,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Right>
@@ -817,36 +793,13 @@
 			<Left>Gal Used</Left>			
 			<Right>
 				<ToFixed precision="1">
-					<Substract>
-						<MaxSinceStart>
-							<Simvar name="FUEL TOTAL QUANTITY:1" unit="gallon"/>
-						</MaxSinceStart>
-						<Simvar name="FUEL TOTAL QUANTITY:1" unit="gallon"/>
-					</Substract>
+					<Simvar name="L:XMLVAR_GAL_USED" unit="gallon"/>
 				</ToFixed>
 			</Right>
 		</Text>
 		
 		<Text><!--Endr-->
 			<Left>Endur</Left>			
-			<Right>
-				<Duration>
-					<Multiply>					
-						<Divide>
-								<Simvar name="FUEL TOTAL QUANTITY:1" unit="gallon"/>
-							<Add>
-								<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
-								<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
-							</Add>
-						</Divide>
-						<Constant>3600</Constant>						
-					</Multiply>
-				</Duration>
-			</Right>
-		</Text>
-		
-		<Text><!--Range-->
-			<Left>Range NM</Left>			
 			<Right>
 				<If>
                     <Condition>
@@ -855,9 +808,49 @@
                             <Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
 							<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
 						</Add>
-                            <Constant>2</Constant>
+                            <Constant>4</Constant>
                         </Greater>
                     </Condition>
+				<Then>	
+					<Duration>
+						<Multiply>					
+							<Divide>
+									<Simvar name="FUEL TOTAL QUANTITY:1" unit="gallon"/>
+								<Add>
+									<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
+									<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
+								</Add>
+							</Divide>
+							<Constant>3600</Constant>						
+						</Multiply>
+					</Duration>
+				</Then>
+				<Else>
+					<Constant>_:__</Constant>
+				</Else>
+				</If>
+			</Right>
+		</Text>
+		
+		<Text><!--Range-->
+			<Left>Range NM</Left>			
+			<Right>
+				<If>
+				<Condition>
+				<And>
+						<Greater>
+							<Add>
+							<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
+							<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
+							</Add>
+							<Constant>4</Constant>	
+						</Greater>
+						<Greater>
+							<Simvar name="GROUND VELOCITY:1" unit="knots"/>
+							<Constant>45</Constant>	
+						</Greater>
+				</And>	
+				</Condition>
 				<Then>				
 					<ToFixed precision="0">
 						<Multiply>
@@ -870,10 +863,10 @@
 								</Add>
 							</Divide>
 						</Multiply>
-				</ToFixed>
+					</ToFixed>
 				</Then>
 				<Else>
-						<Constant>X</Constant>
+						<Constant>---</Constant>
 				</Else>
 				</If>
 			</Right>
@@ -920,7 +913,7 @@
 			<Value>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+				<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -945,14 +938,14 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>						
 			</Value>
 			<Value2>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+				<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -977,7 +970,7 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>
 			</Value2>
@@ -1015,26 +1008,26 @@
 			<Value>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<Simvar name="PROP RPM:1" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value>
 			<Value2>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<Simvar name="PROP RPM:2" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value2>
@@ -1070,7 +1063,7 @@
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -1078,7 +1071,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Left>
@@ -1086,7 +1079,7 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -1094,7 +1087,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Right>

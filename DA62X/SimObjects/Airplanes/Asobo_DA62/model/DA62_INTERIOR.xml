@@ -123,7 +123,7 @@
 			<CameraTitle>Pedestal_Fwd</CameraTitle>
 		</Component>
 	
-		<!-- #### Commenting ENGINE ECU, as it is not implemente	d DA62X  ####-->
+		<!-- #### Commenting ENGINE ECU, as it is not implemented DA62X  ####-->
 		<Component ID="ENGINE_ECU">
 		
 			<UseTemplate Name="ASOBO_GT_Switch_Dummy">
@@ -592,15 +592,6 @@
 					</CODE_POS_1>
 					
 					<CODE_POS_2><!--OFF-->
-						I:XMLVAR_DEICEAlternateDisabled) 
-						if{ 
-						(&gt;K:ANTI_ICE_OFF) 
-						}
-						(I:XMLVAR_DEICE_Windshield_PumpActive) ! 
-						if{ 
-						(&gt;K:WINDSHIELD_DEICE_OFF) 
-						}
-						
 					0 (&gt;L:XMLVAR_DEICE_MODE) 
 					</CODE_POS_2>
 	
@@ -859,13 +850,13 @@
 		<Component ID="GLASS_COCKPIT">
 		<Component ID="GLASS_COCKPIT_Screen_Attitude_Text" Node="AttitudeDisplay">
 			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
-			<EMISSIVE_CODE>0.1</EMISSIVE_CODE>
+			<EMISSIVE_CODE>0.15</EMISSIVE_CODE>
 			</UseTemplate>
 		</Component>
 
 		<Component ID="GLASS_COCKPIT_Screen_Speed_Text" Node="SpeedDisplay">
 			<UseTemplate Name="ASOBO_GT_Emissive_Gauge">
-			<EMISSIVE_CODE>0.1</EMISSIVE_CODE>
+			<EMISSIVE_CODE>0.15</EMISSIVE_CODE>
 			</UseTemplate>
 		</Component>
 		</Component>

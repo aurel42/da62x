@@ -312,13 +312,16 @@
 			<Type>Caution</Type>
 			<Text>DEIC PRES LO</Text>
 			<Condition>
+			<Or>
 				<And>
 					<LowerEqual>
 					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
-					<Constant>0.15</Constant>
+					<Constant>0.05</Constant>
 					</LowerEqual>
 					<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
 				</And>
+				<Simvar name="L:XMLVAR_LTS_Test" unit="bool"/>
+			</Or>	
 			</Condition>
 		</Annunciation>
 		
@@ -326,6 +329,7 @@
 			<Type>Caution</Type>
 			<Text>DEIC PRES HI</Text>
 			<Condition>
+				<Or>
 				<And>
 					<Greater>
 					<Simvar name="STRUCTURAL ICE PCT" unit="percent"/>
@@ -333,10 +337,12 @@
 					</Greater>
 					<GreaterEqual>
 					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
-					<Constant>0.15</Constant>
+					<Constant>0.05</Constant>
 					</GreaterEqual>
 					<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
 				</And>
+				<Simvar name="L:XMLVAR_LTS_Test" unit="bool"/>
+				</Or>	
 			</Condition>
 		</Annunciation>	
 
@@ -344,13 +350,16 @@
 			<Type>Caution</Type>
 			<Text>DEICE LVL LO</Text>
 			<Condition>
+				<Or>
 				<And>
-				<Lower>
-					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
-					<Constant>2.9</Constant>
-				</Lower>
-				<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
+					<Lower>
+						<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
+						<Constant>2.9</Constant>
+					</Lower>
+					<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
 				</And>
+				<Simvar name="L:XMLVAR_LTS_Test" unit="bool"/>
+				</Or>	
 			</Condition>
 		</Annunciation>
 		
@@ -849,7 +858,7 @@
 			<Value>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+				<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -874,14 +883,14 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>						
 			</Value>
 			<Value2>
 				<If>
 				<Condition>
-				<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+				<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 				<Then>			
 				<Max>
@@ -906,7 +915,7 @@
 				</Max>
 				</Then>
 				<Else>
-					<Constant>-100</Constant>
+					<Constant>-0</Constant>
 				</Else>
 				</If>
 			</Value2>
@@ -954,26 +963,26 @@
 			<Value>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<Simvar name="PROP RPM:1" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value>
 			<Value2>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<Simvar name="PROP RPM:2" unit="rpm"/>
 			</Then>
 			<Else>
-				<Constant>-3000</Constant>
+				<Constant>-0</Constant>
 			</Else>
 			</If>
 			</Value2>
@@ -1009,7 +1018,7 @@
 			<Left>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:1" unit="Bool"/>
+					<Simvar name="L:XMLVAR_L_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -1017,7 +1026,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Left>
@@ -1025,7 +1034,7 @@
 			<Right>
 			<If>
 				<Condition>
-					<Simvar name="RECIP ENG ENGINE MASTER SWITCH:2" unit="Bool"/>
+					<Simvar name="L:XMLVAR_R_MASTER" unit="Bool"/>
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
@@ -1033,7 +1042,7 @@
 				</ToFixed>
 			</Then>
 			<Else>
-				<Constant>X</Constant>
+				<Constant>---</Constant>
 			</Else>
 			</If>
 			</Right>
@@ -1187,7 +1196,7 @@
 							<Simvar name="L:XMLVAR_FUEL_TEMPERATURE" unit="celsius"/>
 							<Constant>30</Constant>
 						</Add>
-						<Constant>1.05</Constant>
+						<Constant>1.02</Constant>
 					</Multiply>
 					<Constant>30</Constant>
 				</Substract>

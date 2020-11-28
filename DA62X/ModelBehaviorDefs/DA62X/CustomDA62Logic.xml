@@ -19,13 +19,16 @@
 <Macro Name="IndicateGBOXTemperature2">(L:XMLVAR_TARGET_GBOX_TEMPERATURE_2, celsius) (L:XMLVAR_GBOX_TEMPERATURE_2, celsius) - 3 / </Macro>
 <!--Fuel-->
 <Macro Name="IndicateFuelTemperature">(L:XMLVAR_TARGET_FUEL_TEMPERATURE, celsius) (L:XMLVAR_FUEL_TEMPERATURE, celsius) - 2000 / </Macro>
+<Macro Name="FuelUsed">(A:ENG FUEL FLOW GPH:1, gallons per hour) (A:ENG FUEL FLOW GPH:2, gallons per hour) + </Macro>
 <!--Deice-->
 <Macro Name="Deiceused">(L:XMLVAR_DEICE_QUANTITY_USED, gallons) (L:XMLVAR_DEICE_FLOW) + </Macro>
-<Macro Name="Duty_Cycle">(L:XMLVAR_DUTY_CYCLE_TIMER) 1 + </Macro>
 <!--Timer-->
 <Macro Name="Time_Passed">(L:XMLVAR_Time_Passed, seconds) 1 + </Macro>
 <!--FADEC-->
 <Macro Name="L_ECUTEST">
+
+			1 (&gt;L:XMLVAR_ECUTEST_L_B_FAIL)
+			1 (&gt;L:XMLVAR_ECUTEST_L_A_FAIL)
 			1 (&gt;L:XMLVAR_L_ECUTEST_ACTIVE) 
 			(L:L_RUNUP_TIMER) ++ (&gt;L:L_RUNUP_TIMER)
 		
@@ -54,18 +57,9 @@
 			if{
 				0 (&gt;K:THROTTLE1_SET) 
 			}
-			(L:L_RUNUP_TIMER) 14 == 
-			if{
-				0 (&gt;L:XMLVAR_L_ECUTEST_ACTIVE) 
-				0 (&gt;L:L_RUNUP_TIMER)
-			}
-			(L:L_RUNUP_TIMER) 13 &lt;=
-			if{
-				1 (&gt;L:XMLVAR_ECUTEST_L_B_FAIL)
-				1 (&gt;L:XMLVAR_ECUTEST_L_A_FAIL)
-			}
 			(L:L_RUNUP_TIMER) 13 &gt;=
 			if{
+				0 (&gt;L:XMLVAR_L_ECUTEST_ACTIVE) 
 				0 (&gt;L:XMLVAR_ECUTEST_L_B_FAIL)
 				0 (&gt;L:XMLVAR_ECUTEST_L_A_FAIL)
 			}
@@ -73,8 +67,12 @@
 </Macro>
 
 <Macro Name="R_ECUTEST">
+
+			1 (&gt;L:XMLVAR_ECUTEST_R_B_FAIL)
+			1 (&gt;L:XMLVAR_ECUTEST_R_A_FAIL)
 			1 (&gt;L:XMLVAR_R_ECUTEST_ACTIVE) 
 			(L:R_RUNUP_TIMER) ++ (&gt;L:R_RUNUP_TIMER)
+			
 		
 			(L:R_RUNUP_TIMER) 1 == 
 			if{
@@ -101,18 +99,9 @@
 			if{
 				0 (&gt;K:THROTTLE2_SET) 
 			}
-			(L:R_RUNUP_TIMER) 14 == 
-			if{
-				0 (&gt;L:XMLVAR_R_ECUTEST_ACTIVE) 
-				0 (&gt;L:R_RUNUP_TIMER)
-			}
-			(L:R_RUNUP_TIMER) 13 &lt;= 
-			if{
-				1 (&gt;L:XMLVAR_ECUTEST_R_B_FAIL)
-				1 (&gt;L:XMLVAR_ECUTEST_R_A_FAIL)
-			}
 			(L:R_RUNUP_TIMER) 13 &gt;= 
 			if{
+				0 (&gt;L:XMLVAR_R_ECUTEST_ACTIVE) 
 				0 (&gt;L:XMLVAR_ECUTEST_R_B_FAIL)
 				0 (&gt;L:XMLVAR_ECUTEST_R_A_FAIL)
 			}
@@ -161,34 +150,45 @@
 
 <Template Name = "L_Voltage_Indication">
 	<Update Frequency="4">	
+		(A:GENERAL ENG STARTER:1, bool) 
+		(A:GENERAL ENG STARTER:2, bool) or 
+			if{
+				-1.5 (&gt;L:Voltage_drop) 
+			}
+			els{
+				0 (&gt;L:Voltage_drop) 
+			}
+	
 		(L:XMLVAR_TARGET_GENALT_BUS_AMPS_1, amps) 1 &lt;=
 		(L:XMLVAR_TARGET_GENALT_BUS_AMPS_2, amps) 1 &gt;= and 
 		if{
-			(A:ELECTRICAL MAIN BUS VOLTAGE:1, volts) (A:ELECTRICAL BATTERY VOLTAGE, volts) + 0.515 * (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_1, volts)
+			(A:ELECTRICAL MAIN BUS VOLTAGE:1, volts) (A:ELECTRICAL BATTERY VOLTAGE, volts) + 0.515 * (L:Voltage_drop) + (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_1, volts)
 		}
 		els{
-			(A:ELECTRICAL MAIN BUS VOLTAGE:1, volts) (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_1, volts)
+			(A:ELECTRICAL MAIN BUS VOLTAGE:1, volts) (L:Voltage_drop) + (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_1, volts)
 		}
 	</Update>	
 </Template>
 
 <Template Name = "R_Voltage_Indication">
 	<Update Frequency="5">	
+	
+	
 		(L:XMLVAR_TARGET_GENALT_BUS_AMPS_2, amps) 1 &lt;=
 		(L:XMLVAR_TARGET_GENALT_BUS_AMPS_1, amps) 1 &gt;= and 
 			or
 		if{
-			(A:ELECTRICAL MAIN BUS VOLTAGE:2, volts) (A:ELECTRICAL BATTERY VOLTAGE, volts) + 0.515 * (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_2, volts)
+			(A:ELECTRICAL MAIN BUS VOLTAGE:2, volts) (A:ELECTRICAL BATTERY VOLTAGE, volts) + 0.515 * (L:Voltage_drop) + (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_2, volts)
 		}
 		els{
-			(A:ELECTRICAL MAIN BUS VOLTAGE:2, volts) (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_2, volts)
+			(A:ELECTRICAL MAIN BUS VOLTAGE:2, volts) (L:Voltage_drop) + (&gt;L:XMLVAR_TARGET_MAIN_BUS_VOLTAGE_2, volts)
 		}
 	</Update>	
 </Template>
 
 <Template Name = "L_Engine_Indications">
 	<Update Frequency="10">	
-		(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool)
+		(L:XMLVAR_L_MASTER, Bool)
 		if{
 			(A:RECIP ENG RADIATOR TEMPERATURE:1, celsius) (&gt;L:XMLVAR_TARGET_RADIATOR_TEMPERATURE_1, celsius)
 			(A:GENERAL ENG OIL TEMPERATURE:1, celsius) (&gt;L:XMLVAR_TARGET_OIL_TEMPERATURE_1, celsius)
@@ -197,7 +197,7 @@
 		}
 		els{
 		-40 (&gt;L:XMLVAR_TARGET_RADIATOR_TEMPERATURE_1, celsius)
-		-1 (&gt;L:XMLVAR_TARGET_OIL_PRESSURE_1, bar)
+		0 (&gt;L:XMLVAR_TARGET_OIL_PRESSURE_1, bar)
 		-40 (&gt;L:XMLVAR_TARGET_OIL_TEMPERATURE_1, celsius)
 		-35 (&gt;L:XMLVAR_TARGET_GBOX_TEMPERATURE_1, celsius)
 		}
@@ -206,7 +206,7 @@
 
 <Template Name = "R_Engine_Indications">
 	<Update Frequency="10">	
-		(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool)
+		(L:XMLVAR_R_MASTER, Bool)
 		if{
 			(A:RECIP ENG RADIATOR TEMPERATURE:2, celsius) (&gt;L:XMLVAR_TARGET_RADIATOR_TEMPERATURE_2, celsius)
 			(A:GENERAL ENG OIL TEMPERATURE:2, celsius) (&gt;L:XMLVAR_TARGET_OIL_TEMPERATURE_2, celsius)	
@@ -215,7 +215,7 @@
 		}
 		els{
 		-40 (&gt;L:XMLVAR_TARGET_RADIATOR_TEMPERATURE_2, celsius)
-		-1 (&gt;L:XMLVAR_TARGET_OIL_PRESSURE_2, bar)
+		0 (&gt;L:XMLVAR_TARGET_OIL_PRESSURE_2, bar)
 		-40 (&gt;L:XMLVAR_TARGET_OIL_TEMPERATURE_2, celsius)
 		-35 (&gt;L:XMLVAR_TARGET_GBOX_TEMPERATURE_2, celsius)
 		}
@@ -232,13 +232,23 @@
 		els{
 			(A:TOTAL AIR TEMPERATURE:2, celsius) (&gt;L:XMLVAR_TARGET_FUEL_TEMPERATURE, celsius) 
 		}
-	</Update>	
+		
+		
+		(A:ELECTRICAL MASTER BATTERY, Bool) 0 == 
+		if{
+			0 (&gt;L:XMLVAR_GAL_USED)
+		}
 	
+		(L:XMLVAR_GAL_USED_3600) @FuelUsed + (&gt;L:XMLVAR_GAL_USED_3600)
+		
+		(L:XMLVAR_GAL_USED_3600) 3600 / (&gt;L:XMLVAR_GAL_USED)
+		
+	</Update>	
 </Template>
 
-<Template Name = "Deice_Fluid">
+<Template Name = "Deice_Fluid"> 
 	<Update Frequency="1">	
-	
+										<!-- please dont judge my code i know its bad--> 
 		(L:XMLVAR_DEICE_ALT) !
 		(L:XMLVAR_DEICE_MODE) and 
 		if{
@@ -284,7 +294,7 @@
 					(&gt;K:ANTI_ICE_OFF)
 					}
 			
-				(L:XMLVAR_DUTY_CYCLE_TIMER) @Duty_Cycle (&gt;L:XMLVAR_DUTY_CYCLE_TIMER) 
+				(L:XMLVAR_DUTY_CYCLE_TIMER) ++ (&gt;L:XMLVAR_DUTY_CYCLE_TIMER) 
 			}	
 			
 			els{
@@ -299,97 +309,74 @@
 			
 				1 (&gt;L:XMLVAR_DUTY_CYCLE_TIMER) 
 				}	
-				
-			(L:XMLVAR_DEICE_QUANTITY_USED) @Deiceused (&gt;L:XMLVAR_DEICE_QUANTITY_USED) 
-			9.5 (L:XMLVAR_DEICE_QUANTITY_USED) - (&gt;L:XMLVAR_DEICE_QUANTITY) 
 		}
-		
 		els{
-			(&gt;K:ANTI_ICE_OFF) (&gt;K:WINDSHIELD_DEICE_OFF) 
-			9.5 (L:XMLVAR_DEICE_QUANTITY_USED) - (&gt;L:XMLVAR_DEICE_QUANTITY) 
+			(&gt;K:ANTI_ICE_OFF) 
 			1 (&gt;L:XMLVAR_DUTY_CYCLE_TIMER) 
+			0 (&gt;L:XMLVAR_DEICE_FLOW) 
 		}	
 		
 		(L:XMLVAR_WINDSHIELD_DEICE) 0 == 
 		if {
 			(&gt;K:WINDSHIELD_DEICE_OFF) 
+			
 		}
 		(L:XMLVAR_WINDSHIELD_DEICE) 1 == 
 		(L:XMLVAR_DEICE_QUANTITY, gallons) 0.02 &gt;= and 
 		if{
 			(&gt;K:WINDSHIELD_DEICE_ON) 
+			(L:XMLVAR_DEICE_FLOW) 0.002 + (&gt;L:XMLVAR_DEICE_FLOW) 
 		}
+		
+		
+			(L:XMLVAR_DEICE_QUANTITY_USED) @Deiceused (&gt;L:XMLVAR_DEICE_QUANTITY_USED) 
+			9.5 (L:XMLVAR_DEICE_QUANTITY_USED) - (&gt;L:XMLVAR_DEICE_QUANTITY) 
+		
 	</Update>	
 	
 </Template>
 
-<!--k:PROP_PITCH_SET
-(&gt;K:THROTTLE_FULL)
-KEY_THROTTLE_FULL
-
-(&gt;K:PROP_PITCH1_SET)
-(&gt;K:THROTTLE1_SET)
-KEY_AXIS_THROTTLE_SET
-(A:GENERAL ENG THROTTLE LEVER POSITION:1, percent) 
-(A:GENERAL ENG COMBUSTION, bool)
-(A:GENERAL ENG THROTTLE LEVER POSITION:1, percent) 
-(A:ENG TORQUE:1) 
-(A:GENERAL ENG RPM:1) (
-(A:PROP RPM:1) 
-
-	(I:XMLVAR_ThrottlePos_Disconnected_XAxis) sp0
-	(I:XMLVAR_ThrottlePos_Disconnected_YAxis)
-
-
-
-
+<!--16384 / 2300 = 7.123478
+	(A:GENERAL ENG THROTTLE LEVER POSITION:1, percent) (&gt;L:L_POWER_TARGET)
+	(L:L_POWER_TARGET) (L:L_POWER_OUTPUT) - (&gt;L:L_POWER_ERROR) 
 -->
 
 <Template Name = "L_FADEC">
 	<Update Frequency="30">	
 	
-	(A:ENG TORQUE:1, Foot pounds) (A:GENERAL ENG RPM:1, RPM) * 5252 / (&gt;L:L_POWER_OUTPUT) 
-	
+	(A:ENG TORQUE:1, Foot pounds) (A:GENERAL ENG RPM:1, RPM) * 5252 / 1.8 / (&gt;L:L_POWER_OUTPUT) 
 	
 	(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool) 1 == 
 	(L:XMLVAR_ECUTEST:1) 0 == and 
 	if{
-		(L:L_POWER_OUTPUT) 171 &gt;= 
+		(L:L_POWER_OUTPUT) 95 &gt;= 
 		if{
-			(L:L_POWER_OUTPUT) 171 - 79.1497 * 15671 + (&gt;K:PROP_PITCH1_SET)
+			(L:L_POWER_OUTPUT) 95 - 20 * 2200 + 7.123478 * (&gt;K:PROP_PITCH1_SET)
 		}
-		(L:L_POWER_OUTPUT) 162 &gt;= 
-		(L:L_POWER_OUTPUT) 171 &lt;= 
+		(L:L_POWER_OUTPUT) 90 &gt;= 
+		(L:L_POWER_OUTPUT) 95 &lt;= and 
 		if{
-			 15671 (&gt;K:PROP_PITCH1_SET)
+			 2200 7.123478 * (&gt;K:PROP_PITCH1_SET)
 		}
-		(L:L_POWER_OUTPUT) 36 &gt;= 
-		(L:L_POWER_OUTPUT) 162 &lt;= 
+		(L:L_POWER_OUTPUT) 20 &gt;= 
+		(L:L_POWER_OUTPUT) 90 &lt;= and 
 		if{
-			 (L:L_POWER_OUTPUT) 36 - 15.829 * 13534 + (&gt;K:PROP_PITCH1_SET)
+			 (L:L_POWER_OUTPUT) 20 - 4.28571 * 1900 + 7.123478 * (&gt;K:PROP_PITCH1_SET)
 		}
 		(L:L_POWER_OUTPUT) 0 &gt;= 
-		(L:L_POWER_OUTPUT) 36 &lt;= 
+		(L:L_POWER_OUTPUT) 20 &lt;= and 
 		if{
-			 36 (L:L_POWER_OUTPUT) - 39.57 * 13534 + (&gt;K:PROP_PITCH1_SET)
+			 20 (L:L_POWER_OUTPUT) - 10 * 1900 + 7.123478 * (&gt;K:PROP_PITCH1_SET)
 		}
 		(L:L_POWER_OUTPUT) 0 &lt;= 
 		if{
-			 14959 (&gt;K:PROP_PITCH1_SET)
+			 2100 7.123478 * (&gt;K:PROP_PITCH1_SET)
+		}
+		(A:PROP RPM:1, RPM) 300 &lt;= 
+		if{
+			16384 (&gt;K:PROP_PITCH1_SET)
 		}
 	}	
-	
-	(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool) 0 == 
-	(A:PROP RPM:1, RPM) 1300 &gt;= and 
-	if{
-		0 (&gt;K:PROP_PITCH1_SET)
-	}
-	
-	(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool) 
-	(A:PROP RPM:1, RPM) 0 == and 
-	if{
-		16384 (&gt;K:PROP_PITCH1_SET)
-	}
 	
 	</Update>	
 </Template>
@@ -397,54 +384,69 @@ KEY_AXIS_THROTTLE_SET
 <Template Name = "R_FADEC">
 	<Update Frequency="30">	
 	
-	(A:ENG TORQUE:2, Foot pounds) (A:GENERAL ENG RPM:2, RPM) * 5252 / (&gt;L:R_POWER_OUTPUT) 
+	(A:ENG TORQUE:2, Foot pounds) (A:GENERAL ENG RPM:2, RPM) * 5252 / 1.8 / (&gt;L:R_POWER_OUTPUT) 
 	
-	
-	(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 1 == 
+	(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 1 ==  
 	(L:XMLVAR_ECUTEST:2) 0 == and 
 	if{
-		(L:R_POWER_OUTPUT) 171 &gt;= 
+		(L:R_POWER_OUTPUT) 95 &gt;= 
 		if{
-			(L:R_POWER_OUTPUT) 171 - 79.1497 * 15671 + (&gt;K:PROP_PITCH2_SET)
+			(L:R_POWER_OUTPUT) 95 - 20 * 2200 + 7.123478 * (&gt;K:PROP_PITCH2_SET)
 		}
-		(L:R_POWER_OUTPUT) 162 &gt;= 
-		(L:R_POWER_OUTPUT) 171 &lt;= 
+		(L:R_POWER_OUTPUT) 90 &gt;= 
+		(L:R_POWER_OUTPUT) 95 &lt;= and 
 		if{
-			 15671 (&gt;K:PROP_PITCH2_SET)
+			 2200 7.123478 * (&gt;K:PROP_PITCH2_SET)
 		}
-		(L:R_POWER_OUTPUT) 36 &gt;= 
-		(L:R_POWER_OUTPUT) 162 &lt;= 
+		(L:R_POWER_OUTPUT) 20 &gt;= 
+		(L:R_POWER_OUTPUT) 90 &lt;= and 
 		if{
-			 (L:R_POWER_OUTPUT) 36 - 15.829 * 13534 + (&gt;K:PROP_PITCH2_SET)
+			 (L:R_POWER_OUTPUT) 20 - 4.28571 * 1900 + 7.123478 * (&gt;K:PROP_PITCH2_SET)
 		}
 		(L:R_POWER_OUTPUT) 0 &gt;= 
-		(L:R_POWER_OUTPUT) 36 &lt;= 
+		(L:R_POWER_OUTPUT) 20 &lt;= and 
 		if{
-			 36 (L:R_POWER_OUTPUT) - 39.57 * 13534 + (&gt;K:PROP_PITCH2_SET)
+			 20 (L:R_POWER_OUTPUT) - 10 * 1900 + 7.123478 * (&gt;K:PROP_PITCH2_SET)
 		}
 		(L:R_POWER_OUTPUT) 0 &lt;= 
 		if{
-			 14959 (&gt;K:PROP_PITCH2_SET)
+			 2100 7.123478 * (&gt;K:PROP_PITCH2_SET)
 		}
-	}	
+		(A:PROP RPM:2, RPM) 300 &lt;= 
+		if{
+			16384 (&gt;K:PROP_PITCH2_SET)
+		}
+	}		
 	
-	(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 0 == 
-	(A:PROP RPM:2, RPM) 1300 &gt;= and 
-	if{
-		0 (&gt;K:PROP_PITCH2_SET)
-	}
-	
-	(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 
-	(A:PROP RPM:2, RPM) 0 == and 
-	if{
-		16384 (&gt;K:PROP_PITCH2_SET)
-	}
 	</Update>	
 </Template>
 
-
 <Template Name = "L_ECU_FUNCTIONS">
 	<Update Frequency="1">	
+	
+		(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool) !
+		(A:PROP RPM:1, RPM) 1300 &gt;= and 
+		if{
+			0 (&gt;K:PROP_PITCH1_SET) 
+		}	
+		
+		(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool)
+		if{
+			1 (&gt;L:XMLVAR_L_MASTER) 
+			0 (&gt;L:XMLVAR_L_MASTER_TIMER) 
+		}
+		els{
+			 (L:XMLVAR_L_MASTER_TIMER) 3 &lt;= 
+			 if{
+				(L:XMLVAR_L_MASTER_TIMER) ++ (&gt;L:XMLVAR_L_MASTER_TIMER) 
+				0 (&gt;L:XMLVAR_L_ECUTEST_ACTIVE) 
+				0 (&gt;L:XMLVAR_ECUTEST_L_B_FAIL)
+				0 (&gt;L:XMLVAR_ECUTEST_L_A_FAIL)
+			 }
+			els{
+				0 (&gt;L:XMLVAR_L_MASTER) 
+			}
+		}
 	
 		(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool)
 		(L:XMLVAR_ECUTEST:1) and 
@@ -454,9 +456,7 @@ KEY_AXIS_THROTTLE_SET
 		
 		(L:XMLVAR_ECUTEST:1) 0 == 
 		if{
-		0 (&gt;L:L_RUNUP_TIMER)
-		0 (&gt;L:XMLVAR_ECUTEST_L_B_FAIL)
-		0 (&gt;L:XMLVAR_ECUTEST_L_A_FAIL)
+			0 (&gt;L:L_RUNUP_TIMER) 
 		}
 		
 		(L:XMLVAR_L_ECUTEST_ACTIVE) 1 == 
@@ -465,13 +465,37 @@ KEY_AXIS_THROTTLE_SET
 			0 (&gt;K:THROTTLE1_SET)
 			0 (&gt;L:XMLVAR_L_ECUTEST_ACTIVE) 
 		{
-
+		
 	</Update>	
 </Template>
 
 <Template Name = "R_ECU_FUNCTIONS">
 	<Update Frequency="1">	
 	
+		(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) ! 
+		(A:PROP RPM:2, RPM) 1300 &gt;= and 	
+		if{
+			0 (&gt;K:PROP_PITCH2_SET) 
+		}
+		
+		(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool)
+		if{
+			1 (&gt;L:XMLVAR_R_MASTER) 
+			0 (&gt;L:XMLVAR_R_MASTER_TIMER) 
+		}
+		els{
+			 (L:XMLVAR_R_MASTER_TIMER) 3 &lt;= 
+			 if{
+				(L:XMLVAR_R_MASTER_TIMER) ++ (&gt;L:XMLVAR_R_MASTER_TIMER) 
+				0 (&gt;L:XMLVAR_R_ECUTEST_ACTIVE) 
+				0 (&gt;L:XMLVAR_ECUTEST_R_B_FAIL)
+				0 (&gt;L:XMLVAR_ECUTEST_R_A_FAIL)
+			 }
+			els{
+				0 (&gt;L:XMLVAR_R_MASTER) 
+			}
+		}
+		
 		(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 
 		(L:XMLVAR_ECUTEST:2) and 
 		if{
@@ -480,9 +504,7 @@ KEY_AXIS_THROTTLE_SET
 		
 		(L:XMLVAR_ECUTEST:2) 0 == 
 		if{
-		0 (&gt;L:R_RUNUP_TIMER)
-		0 (&gt;L:XMLVAR_ECUTEST_R_B_FAIL)
-		0 (&gt;L:XMLVAR_ECUTEST_R_A_FAIL)
+			0 (&gt;L:R_RUNUP_TIMER)
 		}
 		
 		(L:XMLVAR_R_ECUTEST_ACTIVE) 1 == 
@@ -491,7 +513,6 @@ KEY_AXIS_THROTTLE_SET
 			0 (&gt;K:THROTTLE2_SET)
 			0 (&gt;L:XMLVAR_R_ECUTEST_ACTIVE) 
 		{
-
 		
 	</Update>	
 </Template>
