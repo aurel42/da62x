@@ -727,7 +727,10 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
+				<Min>
 					<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
+					<Constant>10</Constant>
+				</Min>
 				</ToFixed>
 			</Then>
 			<Else>
@@ -743,7 +746,10 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
+				<Min>
 					<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
+					<Constant>10</Constant>
+				</Min>
 				</ToFixed>
 			</Then>
 			<Else>
@@ -1067,7 +1073,10 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
+				<Min>
 					<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
+					<Constant>10</Constant>
+				</Min>
 				</ToFixed>
 			</Then>
 			<Else>
@@ -1083,7 +1092,10 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
+				<Min>
 					<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
+					<Constant>10</Constant>
+				</Min>					
 				</ToFixed>
 			</Then>
 			<Else>

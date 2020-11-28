@@ -107,6 +107,8 @@
 			}
 </Macro>
 
+<Macro Name="L_P">(L:L_POWER_ERROR) 15 *</Macro>
+<Macro Name="R_P">(L:R_POWER_ERROR) 15 *</Macro>
 
 
 <!---------------------------------------------- ELECTRICAL SYSTEM ---------------------------------------------->
@@ -172,7 +174,6 @@
 
 <Template Name = "R_Voltage_Indication">
 	<Update Frequency="5">	
-	
 	
 		(L:XMLVAR_TARGET_GENALT_BUS_AMPS_2, amps) 1 &lt;=
 		(L:XMLVAR_TARGET_GENALT_BUS_AMPS_1, amps) 1 &gt;= and 
@@ -332,8 +333,19 @@
 			(L:XMLVAR_DEICE_QUANTITY_USED) @Deiceused (&gt;L:XMLVAR_DEICE_QUANTITY_USED) 
 			9.5 (L:XMLVAR_DEICE_QUANTITY_USED) - (&gt;L:XMLVAR_DEICE_QUANTITY) 
 		
+		
+		
+		(A:STRUCTURAL ICE PCT, Percent) 52 &gt;=
+		if{
+			1 (&gt;L:XMLVAR_DEICE_PRESS_HI)
+		}
+		
+		(A:STRUCTURAL ICE PCT, Percent) 48 &lt;=
+		if{
+			0 (&gt;L:XMLVAR_DEICE_PRESS_HI)
+		}
+		
 	</Update>	
-	
 </Template>
 
 <!--16384 / 2300 = 7.123478
@@ -347,6 +359,7 @@
 	(A:ENG TORQUE:1, Foot pounds) (A:GENERAL ENG RPM:1, RPM) * 5252 / 1.8 / (&gt;L:L_POWER_OUTPUT) 
 	
 	(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool) 1 == 
+	(L:XMLVAR_ECU_VOTER:1) 0 == and 
 	(L:XMLVAR_ECUTEST:1) 0 == and 
 	if{
 		(L:L_POWER_OUTPUT) 95 &gt;= 
@@ -378,6 +391,52 @@
 		}
 	}	
 	
+
+		(A:RECIP ENG ENGINE MASTER SWITCH:1, Bool) 1 == 
+		(L:XMLVAR_ECU_VOTER:1) 1 == and
+		(L:XMLVAR_ECUTEST:1) 0 == and 
+		if{
+		
+		(A:GENERAL ENG MIXTURE LEVER POSITION:1, percent) (&gt;L:L_POWER_TARGET)
+		(L:L_POWER_TARGET) (L:L_POWER_OUTPUT) - (&gt;L:L_POWER_ERROR) 
+		
+		(A:GENERAL ENG MIXTURE LEVER POSITION:1, percent) 1 &lt;= 
+		if{
+			0 (&gt;K:THROTTLE1_SET) 
+		}
+		els{
+			(A:GENERAL ENG THROTTLE LEVER POSITION:1, position 16k) @L_P + (&gt;K:THROTTLE1_SET) 
+		}
+	
+		
+		(L:L_POWER_TARGET) 95 &gt;= 
+		if{
+			(L:L_POWER_TARGET) 95 - 10 * 2200 + 7.123478 * (&gt;K:PROP_PITCH1_SET)
+		}
+		(L:L_POWER_TARGET) 90 &gt;= 
+		(L:L_POWER_TARGET) 95 &lt;= and 
+		if{
+			 2200 7.123478 * (&gt;K:PROP_PITCH1_SET)
+		}
+		(L:L_POWER_TARGET) 20 &gt;= 
+		(L:L_POWER_TARGET) 90 &lt;= and 
+		if{
+			 (L:L_POWER_TARGET) 20 - 4.28571 * 1900 + 7.123478 * (&gt;K:PROP_PITCH1_SET)
+		}
+		(L:L_POWER_TARGET) 0 &gt;= 
+		(L:L_POWER_TARGET) 20 &lt;= and 
+		if{
+			 20 (L:L_POWER_TARGET) - 10 * 1900 + 7.123478 * (&gt;K:PROP_PITCH1_SET)
+		}
+		(L:L_POWER_TARGET) 0 &lt;= 
+		if{
+			 2100 7.123478 * (&gt;K:PROP_PITCH1_SET)
+		}
+		(A:PROP RPM:1, RPM) 300 &lt;= 
+		if{
+			16384 (&gt;K:PROP_PITCH1_SET)
+		}
+	}	
 	</Update>	
 </Template>
 
@@ -387,6 +446,7 @@
 	(A:ENG TORQUE:2, Foot pounds) (A:GENERAL ENG RPM:2, RPM) * 5252 / 1.8 / (&gt;L:R_POWER_OUTPUT) 
 	
 	(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 1 ==  
+	(L:XMLVAR_ECU_VOTER:2) 0 == and 
 	(L:XMLVAR_ECUTEST:2) 0 == and 
 	if{
 		(L:R_POWER_OUTPUT) 95 &gt;= 
@@ -418,6 +478,51 @@
 		}
 	}		
 	
+		(A:RECIP ENG ENGINE MASTER SWITCH:2, Bool) 1 == 
+		(L:XMLVAR_ECU_VOTER:2) 1 == and 
+		(L:XMLVAR_ECUTEST:2) 0 == and 
+		if{
+		
+			(A:GENERAL ENG MIXTURE LEVER POSITION:2, percent) (&gt;L:R_POWER_TARGET)
+			(L:R_POWER_TARGET) (L:R_POWER_OUTPUT) - (&gt;L:R_POWER_ERROR) 
+			
+			(A:GENERAL ENG MIXTURE LEVER POSITION:2, percent) 1 &lt;= 
+			if{
+				0 (&gt;K:THROTTLE2_SET) 
+			}
+			els{
+				(A:GENERAL ENG THROTTLE LEVER POSITION:2, position 16k) @R_P + (&gt;K:THROTTLE2_SET) 
+			}
+		
+		
+		(L:R_POWER_TARGET) 95 &gt;= 
+		if{
+			(L:R_POWER_TARGET) 95 - 10 * 2200 + 7.123478 * (&gt;K:PROP_PITCH2_SET)
+		}
+		(L:R_POWER_TARGET) 90 &gt;= 
+		(L:R_POWER_TARGET) 95 &lt;= and 
+		if{
+			 2200 7.123478 * (&gt;K:PROP_PITCH2_SET)
+		}
+		(L:R_POWER_TARGET) 20 &gt;= 
+		(L:R_POWER_TARGET) 90 &lt;= and 
+		if{
+			 (L:R_POWER_TARGET) 20 - 4.28571 * 1900 + 7.123478 * (&gt;K:PROP_PITCH2_SET)
+		}
+		(L:R_POWER_TARGET) 0 &gt;= 
+		(L:R_POWER_TARGET) 20 &lt;= and 
+		if{
+			 20 (L:R_POWER_TARGET) - 10 * 1900 + 7.123478 * (&gt;K:PROP_PITCH2_SET)
+		}
+		(L:R_POWER_TARGET) 0 &lt;= 
+		if{
+			 2100 7.123478 * (&gt;K:PROP_PITCH2_SET)
+		}
+		(A:PROP RPM:2, RPM) 300 &lt;= 
+		if{
+			16384 (&gt;K:PROP_PITCH2_SET)
+		}
+	}	
 	</Update>	
 </Template>
 

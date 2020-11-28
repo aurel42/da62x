@@ -288,14 +288,14 @@
 						<Simvar name="INDICATED ALTITUDE" unit="feet"/>
 						<Simvar name="GPS POSITION ALT" unit="feet"/>
 						</Substract>
-						<Constant>500</Constant>
+						<Constant>999</Constant>
 					</Greater>
 					<Lower>
 						<Substract>
 						<Simvar name="INDICATED ALTITUDE" unit="feet"/>
 						<Simvar name="GPS POSITION ALT" unit="feet"/>
 						</Substract>
-						<Constant>-500</Constant>
+						<Constant>-999</Constant>
 					</Lower>
 				</Or>
 			</Condition>
@@ -331,10 +331,7 @@
 			<Condition>
 				<Or>
 				<And>
-					<Greater>
-					<Simvar name="STRUCTURAL ICE PCT" unit="percent"/>
-					<Constant>50</Constant>
-					</Greater>
+					<Simvar name="L:XMLVAR_DEICE_PRESS_HI" unit="bool"/>
 					<GreaterEqual>
 					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
 					<Constant>0.05</Constant>
@@ -525,6 +522,10 @@
 						<Not>
 							<Simvar name="GEAR HANDLE POSITION" unit="Boolean"/>
 						</Not>
+						<Greater>
+							<Simvar name="GEAR CENTER POSITION" unit="Percent"/>
+							<Constant>99</Constant>
+						</Greater>
 					</And>
 					<And>
 						<Greater>
@@ -554,6 +555,43 @@
 						<Lower>
 							<Simvar name="GEAR RIGHT POSITION" unit="Percent"/>
 							<Constant>100</Constant>
+						</Lower>
+					</And>
+					<And>
+						<Not>
+							<Simvar name="GEAR HANDLE POSITION" unit="Boolean"/>
+						</Not>
+						<Or>
+							<Lower>
+								<Simvar name="GENERAL ENG THROTTLE LEVER POSITION:1" unit="Percent"/>
+								<Constant>1</Constant>
+							</Lower>
+							<Lower>
+								<Simvar name="GENERAL ENG THROTTLE LEVER POSITION:2" unit="Percent"/>
+								<Constant>1</Constant>
+							</Lower>
+						</Or>
+						<Not>
+							<Simvar name="SIM ON GROUND" unit="Boolean"/>
+						</Not>
+					</And>
+					<And>
+						<Not>
+							<Simvar name="GEAR HANDLE POSITION" unit="Boolean"/>
+						</Not>
+						<Or>
+							<Lower>
+								<Simvar name="GENERAL ENG THROTTLE LEVER POSITION:1" unit="Percent"/>
+								<Constant>1</Constant>
+							</Lower>
+							<Lower>
+								<Simvar name="GENERAL ENG THROTTLE LEVER POSITION:2" unit="Percent"/>
+								<Constant>1</Constant>
+							</Lower>
+						</Or>
+						<Lower>
+							<Simvar name="GEAR CENTER POSITION" unit="Percent"/>
+							<Constant>1</Constant>
 						</Lower>
 					</And>
 				</Or>
@@ -611,6 +649,23 @@
 				<Simvar name="RECIP ENG GLOW PLUG ACTIVE:2" unit="Boolean"/>
 			</Condition>
 		</Annunciation>
+		
+		<Annunciation><!--A_L_FADEC_THINGY-->
+			<Type>Advisory</Type>
+			<Text>L MXTR FADEC</Text>
+			<Condition>
+				<Simvar name="L:XMLVAR_ECU_VOTER:1" unit="Boolean"/>
+			</Condition>
+		</Annunciation>		
+		
+		<Annunciation><!--A_R_FADEC_THINGY-->
+			<Type>Advisory</Type>
+			<Text>R MXTR FADEC</Text>
+			<Condition>
+				<Simvar name="L:XMLVAR_ECU_VOTER:2" unit="Boolean"/>
+			</Condition>
+		</Annunciation>			
+		
 		
 	</Annunciations>
 	
@@ -1022,7 +1077,10 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
+				<Min>
 					<Simvar name="ENG FUEL FLOW GPH:1" unit="gallons per hour"/>
+					<Constant>10</Constant>
+				</Min>
 				</ToFixed>
 			</Then>
 			<Else>
@@ -1038,7 +1096,10 @@
 				</Condition>
 			<Then>
 				<ToFixed precision="1">
+				<Min>
 					<Simvar name="ENG FUEL FLOW GPH:2" unit="gallons per hour"/>
+					<Constant>10</Constant>
+				</Min>					
 				</ToFixed>
 			</Then>
 			<Else>
