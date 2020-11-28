@@ -157,8 +157,8 @@
     },
     {
       "path": "ModelBehaviorDefs/DA62X/CustomDA62Logic.xml",
-      "size": 10161,
-      "date": 132494001020650260
+      "size": 10157,
+      "date": 132493951382949438
     },
     {
       "path": "SimObjects/Airplanes/Asobo_DA62/ai.cfg",
@@ -262,13 +262,13 @@
     },
     {
       "path": "SimObjects/Airplanes/Asobo_DA62/TEXTURE/thumbnail.JPG",
-      "size": 284943,
-      "date": 132494023562505882
+      "size": 130326,
+      "date": 132443153798896051
     },
     {
       "path": "SimObjects/Airplanes/Asobo_DA62/TEXTURE/thumbnail_small.JPG",
-      "size": 284943,
-      "date": 132494023562505882
+      "size": 130326,
+      "date": 132443153798896051
     }
   ]
 }

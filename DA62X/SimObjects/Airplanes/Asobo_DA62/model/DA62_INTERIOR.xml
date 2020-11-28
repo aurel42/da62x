@@ -29,6 +29,10 @@
 			<UseTemplate Name="R_Engine_Indications"></UseTemplate>	
 			<UseTemplate Name="Fuel_Temperature"></UseTemplate>	
 			<UseTemplate Name="Deice_Fluid"></UseTemplate>	
+			<UseTemplate Name="L_ECU_FUNCTIONS"></UseTemplate>
+			<UseTemplate Name="R_ECU_FUNCTIONS"></UseTemplate>
+			<UseTemplate Name="L_FADEC"></UseTemplate>	
+			<UseTemplate Name="R_FADEC"></UseTemplate>	
 			
 			<UseTemplate Name="Smooth_Indication"></UseTemplate>	
 			<UseTemplate Name="Smooth_Fuel_Indication"></UseTemplate>
@@ -129,7 +133,7 @@
 				<SWITCH_POSITION_VAR>XMLVAR_ECU_VOTER_1</SWITCH_POSITION_VAR>
 				</UseTemplate>
 				
-			<UseTemplate Name="ASOBO_GT_Switch_3States">
+			<UseTemplate Name="ASOBO_GT_Switch_Dummy">
 				<ANIM_NAME>ECU_Switch_voter_R</ANIM_NAME>
 				<NODE_ID>ECU_Switch_voter_R</NODE_ID>
 				<SWITCH_POSITION_TYPE>I</SWITCH_POSITION_TYPE>
@@ -618,15 +622,10 @@
 					<VAR_SCOPE>I</VAR_SCOPE>
 					<DURATION>5</DURATION> 
 					<CODE_START_TIMER>
-					(&gt;K:WINDSHIELD_DEICE_ON) 
 					1 (&gt;L:XMLVAR_WINDSHIELD_DEICE) 
 					</CODE_START_TIMER>
 					<CODE_AFTER_DURATION>
-					(I:XMLVAR_IceLightState) 2 == 
-					if{ 
-					(&gt;K:WINDSHIELD_DEICE_OFF) 
-					0 (&gt;L:XMLVAR_WINDSHIELD_DEICE) 
-					}
+					0 (&gt;L:XMLVAR_WINDSHIELD_DEICE)
 					</CODE_AFTER_DURATION>
 					<ANIMTIP_0>TT:COCKPIT.TOOLTIPS.DA62_DEICE_SWITCH_WINDSHIELD_PUSH</ANIMTIP_0>
 					<ANIMTIP_1>TT:COCKPIT.TOOLTIPS.DA62_DEICE_SWITCH_WINDSHIELD_PUSHED</ANIMTIP_1>

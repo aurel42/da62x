@@ -307,6 +307,39 @@
 		- STAL HT FAIL
 		- AHRS ALIGN
 		-->
+
+		<Annunciation><!--C_Deice_PRESS_LOW_XML-->
+			<Type>Caution</Type>
+			<Text>DEIC PRES LO</Text>
+			<Condition>
+				<And>
+					<LowerEqual>
+					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
+					<Constant>0.15</Constant>
+					</LowerEqual>
+					<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
+				</And>
+			</Condition>
+		</Annunciation>
+		
+		<Annunciation><!--C_Deice_PRESS_HIGH_XML-->
+			<Type>Caution</Type>
+			<Text>DEIC PRES HI</Text>
+			<Condition>
+				<And>
+					<Greater>
+					<Simvar name="STRUCTURAL ICE PCT" unit="percent"/>
+					<Constant>50</Constant>
+					</Greater>
+					<GreaterEqual>
+					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
+					<Constant>0.15</Constant>
+					</GreaterEqual>
+					<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
+				</And>
+			</Condition>
+		</Annunciation>	
+
 		<Annunciation><!--C_Deice_LVL_LOW_XML-->
 			<Type>Caution</Type>
 			<Text>DEICE LVL LO</Text>
@@ -321,33 +354,35 @@
 			</Condition>
 		</Annunciation>
 		
-		<Annunciation><!--C_Deice_LVL_LOW_LOW_XML-->
+		<Annunciation><!--C_L_ECU_A_FAIL_WIP-->
 			<Type>Caution</Type>
-			<Text>DEIC PRES LO</Text>
+			<Text>L ECU A FAIL</Text>
 			<Condition>
-				<And>
-					<LowerEqual>
-					<Simvar name="L:XMLVAR_DEICE_QUANTITY" unit="gallons"/>
-					<Constant>0.15</Constant>
-					</LowerEqual>
-					<Simvar name="L:XMLVAR_DEICE_MODE" unit="bool"/>
-				</And>
-			</Condition>
-		</Annunciation>
-		
-		<Annunciation><!--C_L_ECUtest_WIP-->
-			<Type>Caution</Type>
-			<Text>L Eng BRUM BRUM</Text>
-			<Condition>
-				<Simvar name="L:XMLVAR_ECUTEST:1" unit="Bool"/>
+				<Simvar name="L:XMLVAR_ECUTEST_L_A_FAIL" unit="Bool"/>
 			</Condition>
 		</Annunciation>
 	
-		<Annunciation><!--C_R_ECUtest_WIP-->
+		<Annunciation><!--C_L_ECU_B_FAIL_WIP-->
 			<Type>Caution</Type>
-			<Text>R Eng BRUM BRUM</Text>
+			<Text>L ECU B FAIL</Text>
 			<Condition>
-				<Simvar name="L:XMLVAR_ECUTEST:2" unit="Bool"/>
+				<Simvar name="L:XMLVAR_ECUTEST_L_B_FAIL" unit="Bool"/>
+			</Condition>
+		</Annunciation>
+		
+		<Annunciation><!--C_R_ECU_A_FAIL_WIP-->
+			<Type>Caution</Type>
+			<Text>R ECU A FAIL</Text>
+			<Condition>
+				<Simvar name="L:XMLVAR_ECUTEST_R_A_FAIL" unit="Bool"/>
+			</Condition>
+		</Annunciation>
+	
+		<Annunciation><!--C_R_ECU_B_FAIL_WIP-->
+			<Type>Caution</Type>
+			<Text>R ECU B FAIL</Text>
+			<Condition>
+				<Simvar name="L:XMLVAR_ECUTEST_R_B_FAIL" unit="Bool"/>
 			</Condition>
 		</Annunciation>
 		
@@ -568,31 +603,6 @@
 			</Condition>
 		</Annunciation>
 		
-		<Annunciation><!--ENGINE-->
-			<Type>Caution</Type>
-			<Text>ENGINE LOAD</Text>
-			<Condition>
-						<Greater>
-							<Multiply>
-								<Divide>
-									<Multiply>
-										<Simvar name="ENG TORQUE:1" unit="Foot pounds"/>
-										<Divide>
-											<Simvar name="GENERAL ENG RPM:1" unit="rpm"/>
-											<Constant>5252</Constant>
-										</Divide>
-										<Constant>550</Constant>
-									</Multiply>
-										<Constant>99000</Constant><!--to fix fuel pump-->
-								</Divide>
-								<Constant>100</Constant>
-							</Multiply>
-							<Constant>105</Constant>
-						</Greater>
-			</Condition>
-		</Annunciation>
-		
-
 	</Annunciations>
 	
 	<!-- Voices Alerts -->
